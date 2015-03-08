@@ -1,0 +1,12 @@
+data<- read.table("./data/household_power_consumption.txt", header=TRUE, sep=";", col.names = c("date","time", "global_active_power", "global_reactive_power", "voltage", "global_intensity", "sub_metering_1", "sub_metering_2","sub_metering_3"))
+data$date <- as.Date(data$date, format = "%d/%m/%Y")
+newdata <- data[data$date >= "2007-02-01" & data$date <= "2007-02-02", ]
+newdata$sub_metering_1<-as.numeric(paste(newdata$sub_metering_1))
+newdata$sub_metering_2<-as.numeric(paste(newdata$sub_metering_2))
+newdata$sub_metering_3<-as.numeric(paste(newdata$sub_metering_3))
+datetime <- paste(as.Date(newdata$date), newdata$time)
+newdata$datetime <- as.POSIXct(datetime)
+plot(newdata$datetime, newdata$sub_metering_1, type = "l", ylab = "Global Active Power (kilowatts)", xlab ="")
+lines(newdata$datetime,newdata$sub_metering_2, col = "red")
+lines(newdata$datetime,newdata$sub_metering_3, col = "blue")
+legend( "topright", col = c("black", "red", "blue"),lty = 1, lwd =2, legend = c("Sub_metering_1", "Sub_metering_2","Sub_metering_3"))
